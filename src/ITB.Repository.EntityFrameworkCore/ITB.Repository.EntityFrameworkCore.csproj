@@ -6,6 +6,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>IT Band System</Authors>
     <Description>Implementation of Pattern Repository for .NET CORE</Description>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

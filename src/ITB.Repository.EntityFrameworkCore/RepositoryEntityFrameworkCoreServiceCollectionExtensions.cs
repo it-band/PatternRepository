@@ -14,6 +14,7 @@ namespace ITB.Repository.EntityFrameworkCore
             
             services.TryAddTransient(typeof(IRepository<>), typeof(Repository<>));
             services.TryAddTransient(typeof(IReadRepository<>), typeof(ReadRepository<>));
+            services.TryAddTransient<IUnitOfWork, UnitOfWork>();
 
             return services;
         }
