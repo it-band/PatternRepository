@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -6,6 +6,8 @@
     <Company>IT Band System</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>1.0.1</Version>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/it-band/PatternRepository</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
