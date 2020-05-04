@@ -47,7 +47,19 @@ namespace ITB.Repository.EntityFrameworkCore
         }
         public IQueryable<TEntity> Query(Specification<TEntity> specification)
         {
-            return BaseQuery.Where(specification);
+            var query = BaseQuery;
+
+            // fetch a Queryable that includes all expression-based includes
+            query = specification.Includes
+                .Aggregate(query,
+                    (current, include) => current.Include(include));
+
+            // modify the IQueryable to include any string-based include statements
+            query = specification.IncludeStrings
+                .Aggregate(query,
+                    (current, include) => current.Include(include));
+
+            return query.Where(specification);
         }
 
         public IQueryable<TEntity> Query(Expression<Func<TEntity, bool>> expression)
@@ -62,7 +74,19 @@ namespace ITB.Repository.EntityFrameworkCore
 
         public async Task<TEntity> FirstOrDefault(Specification<TEntity> specification, CancellationToken cancellationToken = default)
         {
-            return await Query(specification).FirstOrDefaultAsync(cancellationToken);
+            var query = BaseQuery;
+
+            // fetch a Queryable that includes all expression-based includes
+            query = specification.Includes
+                .Aggregate(query,
+                    (current, include) => current.Include(include));
+
+            // modify the IQueryable to include any string-based include statements
+            query = specification.IncludeStrings
+                .Aggregate(query,
+                    (current, include) => current.Include(include));
+
+            return await query.Where(specification).FirstOrDefaultAsync(cancellationToken);
         }
 
         public async Task<TEntity> FirstOrDefault(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
