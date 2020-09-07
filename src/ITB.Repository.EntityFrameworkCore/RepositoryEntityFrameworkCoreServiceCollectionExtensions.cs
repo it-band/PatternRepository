@@ -28,7 +28,7 @@ namespace ITB.Repository.EntityFrameworkCore
                     .ToArray();
 
                 var openTypes = new[]
-                    {
+                {
                     typeof(IQueryableFilter<>)
                 };
 
@@ -37,8 +37,7 @@ namespace ITB.Repository.EntityFrameworkCore
                         && !t.IsAbstract
                         && t.AsType().ImplementsGenericInterface(openType))))
                 {
-                    // use try add to avoid double-registration
-                    services.TryAddTransient(type.AsType());
+                    services.AddTransient(type.AsType());
                 }
             }
 
