@@ -14,12 +14,12 @@ namespace ITB.Repository.EntityFrameworkCore
         {
             if (services == null)
                 throw new ArgumentNullException(nameof(services));
-            
+
             services.TryAddTransient(typeof(IRepository<>), typeof(Repository<>));
             services.TryAddTransient(typeof(IReadRepository<>), typeof(ReadRepository<>));
             services.TryAddTransient<IUnitOfWork, UnitOfWork>();
 
-            if(assemblies != null && assemblies.Length > 0)
+            if (assemblies != null && assemblies.Length > 0)
             {
                 var allTypes = assemblies
                     .Where(a => !a.IsDynamic)
@@ -27,17 +27,13 @@ namespace ITB.Repository.EntityFrameworkCore
                     .SelectMany(a => a.DefinedTypes)
                     .ToArray();
 
-                var openTypes = new[]
-                {
-                    typeof(IQueryableFilter<>)
-                };
-
-                foreach (var type in openTypes.SelectMany(openType => allTypes
+                foreach (var type in allTypes
                     .Where(t => t.IsClass
                         && !t.IsAbstract
-                        && t.AsType().ImplementsGenericInterface(openType))))
+                        && t.AsType().ImplementsGenericInterface(typeof(IQueryableFilter<>))))
                 {
-                    services.AddTransient(type.AsType());
+                    var @interface = type.ImplementedInterfaces.First(i => i.IsGenericType(typeof(IQueryableFilter<>)));
+                    services.AddTransient(@interface, type.AsType());
                 }
             }
 
