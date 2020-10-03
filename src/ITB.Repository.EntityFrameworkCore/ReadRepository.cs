@@ -1,7 +1,4 @@
 ﻿using ITB.Repository.Abstraction;
-using ITB.Shared.Domain;
-using ITB.Shared.Domain.Entities;
-using ITB.Specification;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,11 +6,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using ITB.Shared.Domain;
 
 namespace ITB.Repository.EntityFrameworkCore
 {
     public class ReadRepository<TEntity> : IReadRepository<TEntity>
-        where TEntity : class, IEntity
+        where TEntity : class
     {
         protected readonly DbContext DbContext;
         protected readonly DbSet<TEntity> DbSet;
@@ -45,21 +43,10 @@ namespace ITB.Repository.EntityFrameworkCore
                 return query;
             }
         }
-        public IQueryable<TEntity> Query(Specification<TEntity> specification)
+
+        public async Task<TEntity> Find(params object[] keyObjects)
         {
-            var query = BaseQuery;
-
-            // fetch a Queryable that includes all expression-based includes
-            query = specification.Includes
-                .Aggregate(query,
-                    (current, include) => current.Include(include));
-
-            // modify the IQueryable to include any string-based include statements
-            query = specification.IncludeStrings
-                .Aggregate(query,
-                    (current, include) => current.Include(include));
-
-            return query.Where(specification);
+            return await DbSet.FindAsync(keyObjects);
         }
 
         public IQueryable<TEntity> Query(Expression<Func<TEntity, bool>> expression)
@@ -72,23 +59,6 @@ namespace ITB.Repository.EntityFrameworkCore
             return BaseQuery;
         }
 
-        public async Task<TEntity> FirstOrDefault(Specification<TEntity> specification, CancellationToken cancellationToken = default)
-        {
-            var query = BaseQuery;
-
-            // fetch a Queryable that includes all expression-based includes
-            query = specification.Includes
-                .Aggregate(query,
-                    (current, include) => current.Include(include));
-
-            // modify the IQueryable to include any string-based include statements
-            query = specification.IncludeStrings
-                .Aggregate(query,
-                    (current, include) => current.Include(include));
-
-            return await query.Where(specification).FirstOrDefaultAsync(cancellationToken);
-        }
-
         public async Task<TEntity> FirstOrDefault(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
         {
             return await BaseQuery.FirstOrDefaultAsync(expression, cancellationToken);
@@ -99,21 +69,9 @@ namespace ITB.Repository.EntityFrameworkCore
             return await BaseQuery.CountAsync(cancellationToken);
         }
 
-        public async Task<int> Count(Specification<TEntity> specification, CancellationToken cancellationToken = default)
-        {
-            return await Count(specification.Predicate, cancellationToken);
-        }
-
         public async Task<int> Count(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
         {
             return await BaseQuery.CountAsync(expression, cancellationToken);
-        }
-
-        public async Task<bool> Exists(Specification<TEntity> specification, CancellationToken cancellationToken = default)
-        {
-            var count = await Count(specification, cancellationToken);
-
-            return count > 0;
         }
 
         public async Task<bool> Exists(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)

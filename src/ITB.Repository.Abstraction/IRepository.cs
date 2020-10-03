@@ -1,5 +1,4 @@
-﻿using ITB.Shared.Domain.Entities;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
 namespace ITB.Repository.Abstraction
@@ -9,7 +8,7 @@ namespace ITB.Repository.Abstraction
     }
 
     public interface IRepository<TEntity> : IReadRepository<TEntity>
-        where TEntity : class, IEntity
+        where TEntity : class
     {
         Task<TEntity> Add(TEntity entity, CancellationToken cancellationToken = default);
 
