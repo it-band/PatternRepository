@@ -16,7 +16,7 @@ namespace ITB.Repository.EntityFrameworkCore
         /// <value>
         /// The <see cref="IServiceCollection"/> services are attached to.
         /// </value>
-        public  IServiceCollection Services { get; private set; }
+        public  IServiceCollection Services { get; }
 
         public RepositoryBuilder(IServiceCollection services)
         {
