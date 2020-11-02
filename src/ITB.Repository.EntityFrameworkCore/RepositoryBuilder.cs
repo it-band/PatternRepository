@@ -4,7 +4,6 @@ using System.Reflection;
 using ITB.Repository.Abstraction;
 using ITB.Shared.Domain;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ITB.Repository.EntityFrameworkCore
 {
@@ -30,7 +29,7 @@ namespace ITB.Repository.EntityFrameworkCore
                 throw new ArgumentException($"Type {repositoryType.Name} doesn't implement IRepository<> interface");
             }
 
-            Services.TryAddTransient(typeof(IRepository<>), repositoryType);
+            Services.AddTransient(typeof(IRepository<>), repositoryType);
 
             return this;
         }
@@ -42,7 +41,7 @@ namespace ITB.Repository.EntityFrameworkCore
                 throw new ArgumentException($"Type {readRepositoryType.Name} doesn't implement IReadRepository<> interface");
             }
 
-            Services.TryAddTransient(typeof(IReadRepository<>), readRepositoryType);
+            Services.AddTransient(typeof(IReadRepository<>), readRepositoryType);
 
             return this;
         }
@@ -59,7 +58,7 @@ namespace ITB.Repository.EntityFrameworkCore
                 throw new ArgumentException($"Type {unitOfWorkType.Name} doesn't implement IUnitOfWork interface");
             }
 
-            Services.TryAddTransient(typeof(IUnitOfWork), unitOfWorkType);
+            Services.AddTransient(typeof(IUnitOfWork), unitOfWorkType);
 
             return this;
         }

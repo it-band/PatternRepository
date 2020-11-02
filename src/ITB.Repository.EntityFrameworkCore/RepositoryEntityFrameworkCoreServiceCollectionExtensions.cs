@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using ITB.Repository.Abstraction;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ITB.Repository.EntityFrameworkCore
 {
@@ -12,17 +14,12 @@ namespace ITB.Repository.EntityFrameworkCore
             if (services == null)
                 throw new ArgumentNullException(nameof(services));
 
-            var builder = new RepositoryBuilder(services);
+            services.TryAddTransient(typeof(IRepository<>), typeof(Repository<>));
+            services.TryAddTransient(typeof(IReadRepository<>), typeof(ReadRepository<>));
+            services.TryAddTransient<IUnitOfWork, UnitOfWork>();
 
-            builder
-                .AddRepository(typeof(Repository<>))
-                .AddReadRepository(typeof(ReadRepository<>))
-                .AddUnitOfWork<UnitOfWork>();
-
-            return builder;
+            return new RepositoryBuilder(services);
         }
-
-
 
         internal static bool ImplementsGenericInterface(this Type type, Type interfaceType)
             => type.IsGenericType(interfaceType) || type.GetTypeInfo().ImplementedInterfaces.Any(@interface => @interface.IsGenericType(interfaceType));
