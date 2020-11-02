@@ -5,9 +5,13 @@
     <Authors>IT Band System</Authors>
     <Company>IT Band System</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/it-band/PatternRepository</RepositoryUrl>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ITB.Specification" Version="1.0.3" />
+  </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ITB.Specification;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
@@ -12,8 +13,10 @@ namespace ITB.Repository.Abstraction
         Task<TEntity> Find(params object[] keyObjects);
 
         IQueryable<TEntity> Query(Expression<Func<TEntity, bool>> expression);
+        IQueryable<TEntity> Query(Specification<TEntity> specification);
         IQueryable<TEntity> Query();
 
+        Task<TEntity> FirstOrDefault(Specification<TEntity> specification, CancellationToken cancellationToken = default);
         Task<TEntity> FirstOrDefault(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default);
 
         Task<int> Count(CancellationToken cancellationToken = default);
