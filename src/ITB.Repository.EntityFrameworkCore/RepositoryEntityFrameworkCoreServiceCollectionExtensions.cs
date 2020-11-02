@@ -9,7 +9,7 @@ namespace ITB.Repository.EntityFrameworkCore
 {
     public static class RepositoryEntityFrameworkCoreServiceCollectionExtensions
     {
-        public static RepositoryBuilder AddRepository(this IServiceCollection services)
+        public static RepositoryBuilder AddRepositories(this IServiceCollection services)
         {
             if (services == null)
                 throw new ArgumentNullException(nameof(services));

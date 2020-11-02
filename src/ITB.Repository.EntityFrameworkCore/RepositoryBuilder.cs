@@ -22,7 +22,7 @@ namespace ITB.Repository.EntityFrameworkCore
             Services = services;
         }
 
-        public RepositoryBuilder AddRepository(Type repositoryType)
+        public RepositoryBuilder SetRepository(Type repositoryType)
         {
             if (!repositoryType.ImplementsGenericInterface(typeof(IRepository<>)))
             {
@@ -34,7 +34,7 @@ namespace ITB.Repository.EntityFrameworkCore
             return this;
         }
 
-        public RepositoryBuilder AddReadRepository(Type readRepositoryType)
+        public RepositoryBuilder SetReadRepository(Type readRepositoryType)
         {
             if (!readRepositoryType.ImplementsGenericInterface(typeof(IReadRepository<>)))
             {
@@ -46,12 +46,12 @@ namespace ITB.Repository.EntityFrameworkCore
             return this;
         }
 
-        public RepositoryBuilder AddUnitOfWork<TUnitOfWork>()
+        public RepositoryBuilder SetUnitOfWork<TUnitOfWork>()
         {
-            return AddUnitOfWork(typeof(TUnitOfWork));
+            return SetUnitOfWork(typeof(TUnitOfWork));
         }
 
-        public RepositoryBuilder AddUnitOfWork(Type unitOfWorkType)
+        public RepositoryBuilder SetUnitOfWork(Type unitOfWorkType)
         {
             if (!typeof(IUnitOfWork).IsAssignableFrom(unitOfWorkType))
             {
